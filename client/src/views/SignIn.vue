@@ -17,7 +17,9 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { mapActions } from 'vuex'
+import dashboard from "@/views/Dashboard";
+
 export default {
   name: 'Signin',
   components: {},
@@ -30,10 +32,17 @@ export default {
     }
   },
   methods: {
-    async submit() {
-      let response = axios.post('http://localhost:8080/api/auth/signin', this.form);
-
-      console.log(response.data);
+    ...mapActions({
+      signIn: 'auth/signIn'
+    }),
+    submit() {
+      this.signIn(this.form).then(() => {
+        this.$router.replace({
+          name: 'dashboard'
+        })
+      }).catch(() => {
+        console.log('failed');
+      })
     }
   }
 }
